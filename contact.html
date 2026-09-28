@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact Us - E-Learning Platform{% endblock %}
+
+{% block content %}
+<section class="contact">
+
+   <h1 class="heading">Get in Touch</h1>
+
+   <!-- Contact Details Cards Section -->
+   <div class="box-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+      
+      <div class="box" style="background-color: var(--white); border-radius: .5rem; padding: 2rem; text-align: center; box-shadow: 0 .5rem 1rem rgba(0,0,0,.05);">
+         <i class="fas fa-phone" style="font-size: 2.5rem; color: #8e44ad; margin-bottom: 1rem;"></i>
+         <h3 style="font-size: 1.8rem; color: var(--black); margin-bottom: .5rem;">Phone Number</h3>
+         <a href="tel:1234567890" style="font-size: 1.5rem; color: var(--light-color);">+123-456-7890</a>
+      </div>
+
+      <div class="box" style="background-color: var(--white); border-radius: .5rem; padding: 2rem; text-align: center; box-shadow: 0 .5rem 1rem rgba(0,0,0,.05);">
+         <i class="fas fa-envelope" style="font-size: 2.5rem; color: #8e44ad; margin-bottom: 1rem;"></i>
+         <h3 style="font-size: 1.8rem; color: var(--black); margin-bottom: .5rem;">Email Address</h3>
+         <a href="mailto:contact@elearn.com" style="font-size: 1.5rem; color: var(--light-color);">contact@elearn.com</a>
+      </div>
+
+      <div class="box" style="background-color: var(--white); border-radius: .5rem; padding: 2rem; text-align: center; box-shadow: 0 .5rem 1rem rgba(0,0,0,.05);">
+         <i class="fas fa-map-marker-alt" style="font-size: 2.5rem; color: #8e44ad; margin-bottom: 1rem;"></i>
+         <h3 style="font-size: 1.8rem; color: var(--black); margin-bottom: .5rem;">Office Address</h3>
+         <p style="font-size: 1.5rem; color: var(--light-color);">Chennai, Tamil Nadu, India</p>
+      </div>
+
+   </div>
+
+   <!-- Contact Form Section -->
+   <form action="{{ url_for('contact') }}" method="post" style="background-color: var(--white); border-radius: .5rem; padding: 2rem; box-shadow: 0 .5rem 1rem rgba(0,0,0,.05); max-width: 800px; margin: 0 auto;">
+      <h3 style="font-size: 2rem; color: var(--black); margin-bottom: 1.5rem; text-align: center;">Send Us a Message</h3>
+      
+      <input type="text" name="name" placeholder="Enter your name" required maxlength="100" class="box" style="width: 100%; border-radius: .5rem; background-color: var(--light-bg); padding: 1.2rem 1.4rem; font-size: 1.6rem; color: var(--black); margin-bottom: 1.5rem; border: none;">
+      
+      <input type="email" name="email" placeholder="Enter your email" required maxlength="100" class="box" style="width: 100%; border-radius: .5rem; background-color: var(--light-bg); padding: 1.2rem 1.4rem; font-size: 1.6rem; color: var(--black); margin-bottom: 1.5rem; border: none;">
+      
+      <input type="number" name="number" placeholder="Enter your number" required min="0" max="9999999999" class="box" style="width: 100%; border-radius: .5rem; background-color: var(--light-bg); padding: 1.2rem 1.4rem; font-size: 1.6rem; color: var(--black); margin-bottom: 1.5rem; border: none;">
+      
+      <textarea name="msg" class="box" placeholder="Enter your message" required cols="30" rows="6" maxlength="1000" style="width: 100%; border-radius: .5rem; background-color: var(--light-bg); padding: 1.2rem 1.4rem; font-size: 1.6rem; color: var(--black); margin-bottom: 1.5rem; border: none; resize: none;"></textarea>
+      
+      <input type="submit" value="Send Message" class="btn" name="submit" style="display: block; width: 100%; background-color: #8e44ad; color: #fff; padding: 1.2rem; font-size: 1.8rem; border-radius: .5rem; cursor: pointer; border: none; text-align: center;">
+   </form>
+</section>
+
+
+
+{% endblock %}

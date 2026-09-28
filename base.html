@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>{% block title %}E-Learning Platform{% endblock %}</title>
+
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
+   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+<body>
+<!-- HEADER SECTION -->
+<header class="header">
+   <section class="flex">
+      <div class="left-side">
+         <div id="menu-btn" class="fas fa-bars"></div>
+         <a href="{{ url_for('home') }}" class="logo">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+         </a>
+      </div>
+
+      {% if request.endpoint in ['home', 'courses'] %}
+      <form action="{{ url_for('search_course') }}" method="get" class="search-form">
+      <input type="text" name="query" required placeholder="Search courses..." maxlength="100">
+      <button type="submit" class="fas fa-search"></button>
+      </form>
+      {% endif %}
+
+      
+
+      <div class="icons">
+         <div id="user-btn" class="fas fa-user"></div>
+         <div id="toggle-btn" class="fas fa-sun"></div>
+      </div>
+
+      <!-- TOP RIGHT PROFILE DROPDOWN (Header-kulla irukkanum) -->
+      <div class="profile">
+   {% if session.get('user_id') %}
+      {% if session.get('user_image') and session.get('user_image').startswith('pic-') %}
+         <img src="{{ url_for('static', filename='images/' + session.get('user_image')) }}" class="image" alt="">
+      {% else %}
+         <img src="{{ url_for('static', filename='uploaded_files/' + session.get('user_image', 'pic-1.jpg')) }}" class="image" alt="">
+      {% endif %}
+      <h3 class="name">{{ session.get('user_name') }}</h3>
+      <p class="role">Student</p>
+      <a href="{{ url_for('profile') }}" class="btn">View Profile</a>
+      <a href="{{ url_for('logout') }}" class="delete-btn">Logout</a>
+   {% else %}
+      <h3>Please Login or Register</h3>
+      <div class="flex-btn">
+         <a href="{{ url_for('login') }}" class="option-btn">Login</a>
+         <a href="{{ url_for('register') }}" class="option-btn">Register</a>
+      </div>
+   {% endif %}
+</div>
+   </section>
+</header>
+
+<!-- SIDEBAR SECTION (Profile illaama Clean Navigation) -->
+<div class="side-bar">
+   <div id="close-btn"><i class="fas fa-times"></i></div>
+
+   <nav class="navbar">
+      <a href="{{ url_for('home') }}"><i class="fas fa-home"></i><span>Home</span></a>
+      <a href="{{ url_for('about') }}"><i class="fas fa-question"></i><span>About</span></a>
+      <a href="{{ url_for('courses') }}"><i class="fas fa-graduation-cap"></i><span>Courses</span></a>
+      <a href="{{ url_for('teachers') }}"><i class="fas fa-chalkboard-user"></i><span>Teachers</span></a>
+      <a href="{{ url_for('bookmarks') }}"><i class="fas fa-bookmark"></i><span>Saved Playlists</span></a>
+      <a href="{{ url_for('contact') }}"><i class="fas fa-headset"></i><span>Contact Us</span></a>
+   </nav>
+</div>
+
+<!-- Flash Messages Alert Popup -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }}" style="padding: 12px 20px; margin: 15px 5%; background-color: #f39c12; color: #fff; border-radius: 8px; font-size: 1.6rem; display: flex; justify-content: space-between; align-items: center;">
+         <span><i class="fas fa-exclamation-circle"></i> {{ message }}</span>
+         <span onclick="this.parentElement.style.display='none';" style="cursor: pointer; font-size: 2rem;">&times;</span>
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<!-- Dynamic Page Content Slot -->
+{% block content %}
+{% endblock %}
+
+<!-- Footer Section -->
+<footer class="footer">
+   &copy; Copyright @ 2026 by <span>Saravana Kumar</span> | All rights reserved!
+</footer>
+
+<!-- JS File Link -->
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
