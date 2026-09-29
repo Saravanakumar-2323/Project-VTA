@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ video.title }} - E-Learning Platform{% endblock %}
+
+{% block content %}
+<section class="watch-video">
+
+   <div class="video-container" style="background-color: var(--white); border-radius: .5rem; padding: 2rem; box-shadow: 0 .5rem 1rem rgba(0,0,0,.05); margin-bottom: 2rem;">
+      <!-- Video Player -->
+      <div class="video" style="width: 100%; border-radius: .5rem; overflow: hidden; margin-bottom: 1.5rem;">
+         <video src="{{ url_for('static', filename='uploaded_files/' + video.video_file) }}" controls poster="{{ url_for('static', filename='images/' + video.thumb) }}" style="width: 100%; height: auto; max-height: 50rem; background-color: #000; display: block;"></video>
+      </div>
+
+      <!-- Title -->
+      <h3 class="title" style="font-size: 2.2rem; color: var(--black); margin-bottom: 1rem; font-weight: 600;">{{ video.title }}</h3>
+
+      <!-- Meta Info (Date & Likes) -->
+      <div class="info" style="display: flex; gap: 2rem; align-items: center; margin-bottom: 1.5rem; font-size: 1.6rem; color: var(--light-color);">
+         <p class="date" style="margin: 0;"><i class="fas fa-calendar" style="color: #8e44ad; margin-right: .5rem;"></i><span>{{ video.course.created_at.strftime('%Y-%m-%d') if video.course.created_at else '2026-09-27' }}</span></p>
+         <p class="date" style="margin: 0;"><i class="fas fa-heart" style="color: #e74c3c; margin-right: .5rem;"></i><span>{{ likes_count }} likes</span></p>
+      </div>
+
+      <!-- Tutor Info -->
+      <div class="tutor" style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1.5rem; padding: 1rem 0; border-top: .1rem solid rgba(0,0,0,.1); border-bottom: .1rem solid rgba(0,0,0,.1);">
+         {% if video.course.tutor.image and video.course.tutor.image.startswith('pic-') %}
+            <img src="{{ url_for('static', filename='images/' + video.course.tutor.image) }}" style="height: 5rem; width: 5rem; border-radius: 50%; object-fit: cover;" alt="">
+         {% else %}
+            <img src="{{ url_for('static', filename='uploaded_files/' + (video.course.tutor.image if video.course.tutor.image else 'pic-1.jpg')) }}" style="height: 5rem; width: 5rem; border-radius: 50%; object-fit: cover;" alt="">
+         {% endif %}
+         <div>
+            <h3 style="font-size: 1.8rem; color: var(--black); font-weight: 600;">{{ video.course.tutor.name }}</h3>
+            <span style="font-size: 1.4rem; color: var(--light-color);">Tutor</span>
+         </div>
+      </div>
+
+      <!-- Actions (View Playlist & Like Button) -->
+      <form action="{{ url_for('watch_video', video_id=video.id) }}" method="post" style="display: flex; align-items: center; gap: 1.5rem; justify-content: space-between;">
+         <a href="{{ url_for('playlist', course_id=video.course_id) }}" class="inline-btn" style="padding: 1rem 2rem; font-size: 1.6rem; background-color: #8e44ad; color: #fff; border-radius: .5rem; text-decoration: none;">View Playlist</a>
+         
+         <button type="submit" name="like_btn" style="padding: 1rem 2.5rem; font-size: 1.6rem; border: none; border-radius: .5rem; cursor: pointer; display: flex; align-items: center; gap: .8rem; background-color: var(--light-bg); color: var(--black);">
+            {% if user_liked %}
+               <i class="fas fa-heart" style="color: #e74c3c;"></i><span>Liked</span>
+            {% else %}
+               <i class="far fa-heart" style="color: var(--black);"></i><span>Like</span>
+            {% endif %}
+         </button>
+      </form>
+   </div>
+
+</section>
+
+<!-- Comments Section -->
+<section class="comments">
+   <h1 class="heading" style="font-size: 2.2rem; color: var(--black); margin-bottom: 1.5rem;">Comments</h1>
+
+   <!-- Add Comment Form -->
+   <form action="{{ url_for('watch_video', video_id=video.id) }}" method="post" style="background-color: var(--white); border-radius: .5rem; padding: 2rem; box-shadow: 0 .5rem 1rem rgba(0,0,0,.05); margin-bottom: 2rem;">
+      <h3 style="font-size: 1.8rem; color: var(--black); margin-bottom: 1rem;">Add Comment</h3>
+      <textarea name="comment_box" placeholder="Enter your comment..." required maxlength="1000" cols="30" rows="5" style="width: 100%; border-radius: .5rem; background-color: var(--light-bg); padding: 1.2rem; font-size: 1.6rem; color: var(--black); border: none; resize: none; margin-bottom: 1rem;"></textarea>
+      <input type="submit" value="Add Comment" name="add_comment" style="padding: 1rem 2rem; font-size: 1.6rem; background-color: #8e44ad; color: #fff; border: none; border-radius: .5rem; cursor: pointer;">
+   </form>
+
+   <!-- User Comments List -->
+   <h1 class="heading" style="font-size: 2.2rem; color: var(--black); margin-bottom: 1.5rem;">User Comments</h1>
+   <div class="box-container" style="display: flex; flex-direction: column; gap: 1.5rem;">
+      {% for comment in video.comments %}
+      <div class="box" style="background-color: var(--white); border-radius: .5rem; padding: 1.8rem; box-shadow: 0 .5rem 1rem rgba(0,0,0,.05);">
+         <div class="user" style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1rem;">
+            {% if comment.user.image and comment.user.image.startswith('pic-') %}
+               <img src="{{ url_for('static', filename='images/' + comment.user.image) }}" style="height: 4.5rem; width: 4.5rem; border-radius: 50%; object-fit: cover; flex-shrink: 0;" alt="">
+            {% else %}
+               <img src="{{ url_for('static', filename='uploaded_files/' + (comment.user.image if comment.user.image else 'pic-1.jpg')) }}" style="height: 4.5rem; width: 4.5rem; border-radius: 50%; object-fit: cover; flex-shrink: 0;" alt="">
+            {% endif %}
+            <div>
+               <h3 style="font-size: 1.7rem; color: var(--black); font-weight: 600; margin: 0;">{{ comment.user.name }}</h3>
+               <span style="font-size: 1.3rem; color: var(--light-color);">{{ comment.created_at.strftime('%Y-%m-%d') if comment.created_at else 'Recently' }}</span>
+            </div>
+         </div>
+         <div class="comment-box" style="font-size: 1.6rem; color: var(--black); background-color: var(--light-bg); padding: 1.2rem; border-radius: .5rem; white-space: pre-line;">{{ comment.comment_text }}</div>
+      </div>
+      {% else %}
+         <p class="empty" style="font-size: 1.8rem; color: var(--light-color); text-align: center; padding: 2rem; background-color: var(--white); border-radius: .5rem;">No comments added yet! Be the first to comment.</p>
+      {% endfor %}
+   </div>
+</section>
+{% endblock %}

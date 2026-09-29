@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="form-container">
+
+   <form action="" method="post" enctype="multipart/form-data">
+      <h3>Update Profile</h3>
+
+      <!-- Basic Info -->
+      <p>Update Name</p>
+      <input type="text" name="name" placeholder="{{ user.name }}" maxlength="100" class="box">
+      
+      <p>Update Email</p>
+      <input type="email" name="email" placeholder="{{ user.email }}" maxlength="100" class="box">
+
+      <!-- Personal & Education Details -->
+      <p>Gender</p>
+      <select name="gender" class="box">
+         <option value="" {% if not user.gender %}selected{% endif %}>Select Gender</option>
+         <option value="Male" {% if user.gender == 'Male' %}selected{% endif %}>Male</option>
+         <option value="Female" {% if user.gender == 'Female' %}selected{% endif %}>Female</option>
+         <option value="Other" {% if user.gender == 'Other' %}selected{% endif %}>Other</option>
+      </select>
+
+      <p>Date of Birth</p>
+      <input type="date" name="dob" value="{{ user.dob or '' }}" class="box">
+
+      <p>School</p>
+      <input type="text" name="school" value="{{ user.school or '' }}" placeholder="Enter school name" maxlength="150" class="box">
+
+      <p>College</p>
+      <input type="text" name="college" value="{{ user.college or '' }}" placeholder="Enter college name" maxlength="150" class="box">
+
+      <p>Bio / About You</p>
+      <textarea name="bio" class="box" placeholder="Write a short bio..." rows="3">{{ user.bio or '' }}</textarea>
+
+      <!-- Social Links -->
+      <p>LinkedIn Profile URL</p>
+      <input type="url" name="linkedin" value="{{ user.linkedin or '' }}" placeholder="https://linkedin.com/in/username" class="box">
+
+      <p>GitHub Profile URL</p>
+      <input type="url" name="github" value="{{ user.github or '' }}" placeholder="https://github.com/username" class="box">
+
+      <p>Website / Portfolio URL</p>
+      <input type="url" name="website" value="{{ user.website or '' }}" placeholder="https://yourwebsite.com" class="box">
+
+      <!-- Password Section -->
+      <p>Previous Password</p>
+      <input type="password" name="old_pass" placeholder="Enter your old password" maxlength="20" class="box">
+      
+      <p>New Password</p>
+      <input type="password" name="new_pass" placeholder="Enter your new password" maxlength="20" class="box">
+      
+      <p>Confirm Password</p>
+      <input type="password" name="c_pass" placeholder="Confirm your new password" maxlength="20" class="box">
+      
+      <p>Update Profile Picture</p>
+      <input type="file" accept="image/*" name="image" class="box">
+      
+      <input type="submit" value="Update Profile" name="submit" class="btn">
+   </form>
+
+</section>
+{% endblock %}

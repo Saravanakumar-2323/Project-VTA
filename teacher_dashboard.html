@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Teacher Dashboard - LMS{% endblock %}
+
+{% block content %}
+<section class="dashboard">
+   <h1 class="heading">Teacher Dashboard</h1>
+
+   <div style="margin-bottom: 2rem; text-align: right;">
+      <a href="{{ url_for('add_course') }}" class="btn" style="background-color: #8e44ad; color: #fff; padding: 1rem 2rem; border-radius: .5rem; font-size: 1.6rem;">+ Add New Course</a>
+   </div>
+
+   <div class="box-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr)); gap: 1.5rem;">
+      {% for course in courses %}
+      <div class="box" style="background: var(--white); padding: 2rem; border-radius: .5rem; box-shadow: 0 .5rem 1rem rgba(0,0,0,.05);">
+         <h3 style="font-size: 2rem; color: var(--black); margin-bottom: 1rem;">{{ course.title }}</h3>
+         <p style="font-size: 1.4rem; color: var(--light-color); margin-bottom: 1.5rem;">{{ course.description }}</p>
+         <div style="display: flex; gap: 1rem;">
+            <a href="{{ url_for('add_video', course_id=course.id) }}" class="inline-btn" style="background: #27ae60; color: white; padding: .8rem 1.2rem; border-radius: .5rem; font-size: 1.4rem;">+ Upload Video</a>
+            <a href="{{ url_for('playlist', course_id=course.id) }}" class="inline-btn" style="background: #8e44ad; color: white; padding: .8rem 1.2rem; border-radius: .5rem; font-size: 1.4rem;">View Course</a>
+         </div>
+      </div>
+      {% else %}
+      <p style="font-size: 1.8rem; color: var(--light-color);">No courses uploaded yet! Click "Add New Course" to create one.</p>
+      {% endfor %}
+   </div>
+</section>
+{% endblock %}

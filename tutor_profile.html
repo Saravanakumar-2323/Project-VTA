@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="user-profile">
+
+   <h1 class="heading">Tutor Profile</h1>
+
+   <div class="info">
+      <div class="user">
+         {% if tutor.image and tutor.image.startswith('pic-') %}
+            <img src="{{ url_for('static', filename='images/' + tutor.image) }}" alt="tutor image">
+         {% else %}
+            <img src="{{ url_for('static', filename='uploaded_files/' + (tutor.image if tutor.image else 'pic-1.jpg')) }}" alt="tutor image">
+         {% endif %}
+         <h3>{{ tutor.name }}</h3>
+         <p>{{ tutor.role or 'tutor' }}</p>
+      </div>
+
+      <div class="box-container">
+         <div class="box">
+            <p>Total Courses : <span>{{ courses|length }}</span></p>
+            <a href="#courses-section" class="btn">View Playlists</a>
+         </div>
+         
+         <div class="box">
+            <p>Email : <span>{{ tutor.email }}</span></p>
+            <p>Bio : <span>{{ tutor.bio or 'No bio added yet.' }}</span></p>
+            {% if tutor.gender %}
+               <p>Gender : <span>{{ tutor.gender }}</span></p>
+            {% endif %}
+            {% if tutor.dob %}
+               <p>Date of Birth : <span>{{ tutor.dob }}</span></p>
+            {% endif %}
+         </div>
+
+         {% if tutor.school or tutor.college or tutor.linkedin or tutor.github or tutor.website or tutor.other_social %}
+         <div class="box" style="grid-column: 1 / -1;">
+            {% if tutor.school %}
+               <p>School : <span>{{ tutor.school }}</span></p>
+            {% endif %}
+            {% if tutor.college %}
+               <p>College : <span>{{ tutor.college }}</span></p>
+            {% endif %}
+
+            <div style="margin-top: 1.5rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+               {% if tutor.linkedin %}
+                  <a href="{{ tutor.linkedin }}" target="_blank" class="inline-btn"><i class="fab fa-linkedin"></i> LinkedIn</a>
+               {% endif %}
+               {% if tutor.github %}
+                  <a href="{{ tutor.github }}" target="_blank" class="inline-btn"><i class="fab fa-github"></i> GitHub</a>
+               {% endif %}
+               {% if tutor.website %}
+                  <a href="{{ tutor.website }}" target="_blank" class="inline-btn"><i class="fas fa-globe"></i> Website</a>
+               {% endif %}
+               {% if tutor.other_social %}
+                  {% for link in tutor.other_social.split(',') %}
+                     <a href="{{ link }}" target="_blank" class="inline-btn"><i class="fas fa-link"></i> Link {{ loop.index }}</a>
+                  {% endfor %}
+               {% endif %}
+            </div>
+         </div>
+         {% endif %}
+      </div>
+   </div>
+
+</section>
+
+<section class="courses" id="courses-section">
+   <h1 class="heading">Tutor's Playlists</h1>
+
+   <div class="box-container">
+      {% for course in courses %}
+      <div class="box">
+         <div class="thumb">
+            {% if course.thumb and course.thumb.startswith('thumb-') %}
+               <img src="{{ url_for('static', filename='images/' + course.thumb) }}" alt="course thumbnail">
+            {% else %}
+               <img src="{{ url_for('static', filename='uploaded_files/' + course.thumb) }}" alt="course thumbnail">
+            {% endif %}
+         </div>
+         <h3 class="title">{{ course.title }}</h3>
+         <a href="{{ url_for('playlist', course_id=course.id) }}" class="inline-btn">View Playlist</a>
+      </div>
+      {% else %}
+      <p class="empty">No playlists uploaded by this tutor yet!</p>
+      {% endfor %}
+   </div>
+</section>
+{% endblock %}

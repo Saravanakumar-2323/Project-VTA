@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block title %}My Profile - E-Learning Platform{% endblock %}
+
+{% block content %}
+<section class="user-profile">
+   <h1 class="heading">My Dashboard</h1>
+
+   <!-- Main Profile Card -->
+   <div class="info">
+      <div class="user">
+         {% if user.image and user.image.startswith('pic-') %}
+            <img src="{{ url_for('static', filename='images/' + user.image) }}" alt="Profile">
+         {% else %}
+            <img src="{{ url_for('static', filename='uploaded_files/' + (user.image if user.image else 'pic-1.jpg')) }}" alt="Profile">
+         {% endif %}
+         <h3>{{ user.name }}</h3>
+         <p><i class="fas fa-envelope"></i> {{ user.email }}</p>
+         <span class="role-badge"><i class="fas fa-user-graduate"></i> {{ user.role.capitalize() if user.role else 'Student' }}</span>
+         <br><br>
+         <a href="{{ url_for('update_profile') }}" class="inline-btn"><i class="fas fa-edit"></i> Edit Profile</a>
+      </div>
+
+      <!-- Overview Stats -->
+      <div class="box-container">
+         <div class="box">
+            <i class="fas fa-bookmark"></i>
+            <h3>{{ saved_count }}</h3>
+            <p>Saved Playlists</p>
+            <a href="{{ url_for('bookmarks') }}" class="btn">View Saved</a>
+         </div>
+         <div class="box">
+            <i class="fas fa-heart"></i>
+            <h3>{{ likes_count }}</h3>
+            <p>Liked Videos</p>
+         </div>
+         <div class="box">
+            <i class="fas fa-comment"></i>
+            <h3>{{ comments_count }}</h3>
+            <p>Comments Made</p>
+         </div>
+      </div>
+   </div>
+
+   <!-- Personal, Educational & Social Details Section -->
+   <div class="more-btn" style="margin-top: 2rem; text-align: left;">
+      <h2 class="heading" style="font-size: 2rem;"><i class="fas fa-id-card"></i> Personal & Social Details</h2>
+      
+      <div style="background: var(--white); border-radius: .5rem; padding: 2rem; border: var(--border);">
+         {% if user.bio %}
+            <p style="font-size: 1.6rem; color: var(--black); margin-bottom: 1.5rem; line-height: 1.6;">
+               <strong>Bio:</strong> {{ user.bio }}
+            </p>
+         {% endif %}
+
+         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; font-size: 1.5rem; color: var(--light-color);">
+            {% if user.gender %}
+               <div><i class="fas fa-venus-mars" style="color: var(--main-color);"></i> <strong>Gender:</strong> {{ user.gender }}</div>
+            {% endif %}
+
+            {% if user.dob %}
+               <div><i class="fas fa-calendar-alt" style="color: var(--main-color);"></i> <strong>Date of Birth:</strong> {{ user.dob }}</div>
+            {% endif %}
+
+            {% if user.school %}
+               <div><i class="fas fa-school" style="color: var(--main-color);"></i> <strong>School:</strong> {{ user.school }}</div>
+            {% endif %}
+
+            {% if user.college %}
+               <div><i class="fas fa-university" style="color: var(--main-color);"></i> <strong>College:</strong> {{ user.college }}</div>
+            {% endif %}
+
+            {% if user.linkedin %}
+               <div><i class="fab fa-linkedin" style="color: #0077b5;"></i> <strong>LinkedIn:</strong> <a href="{{ user.linkedin }}" target="_blank" style="color: var(--main-color);">View Profile</a></div>
+            {% endif %}
+
+            {% if user.github %}
+               <div><i class="fab fa-github" style="color: #333;"></i> <strong>GitHub:</strong> <a href="{{ user.github }}" target="_blank" style="color: var(--main-color);">View Profile</a></div>
+            {% endif %}
+
+            {% if user.website %}
+               <div><i class="fas fa-globe" style="color: var(--main-color);"></i> <strong>Website:</strong> <a href="{{ user.website }}" target="_blank" style="color: var(--main-color);">Visit Portfolio</a></div>
+            {% endif %}
+
+            {% if user.other_social %}
+               {% for link in user.other_social.split(',') %}
+                  <div><i class="fas fa-link" style="color: var(--main-color);"></i> <strong>Social Link:</strong> <a href="{{ link }}" target="_blank" style="color: var(--main-color);">{{ link }}</a></div>
+               {% endfor %}
+            {% endif %}
+         </div>
+
+         {% if not user.gender and not user.dob and not user.school and not user.college and not user.bio and not user.linkedin and not user.github and not user.website and not user.other_social %}
+            <p style="font-size: 1.5rem; color: var(--light-color);">No extra details added yet. Click <a href="{{ url_for('update_profile') }}" style="color: var(--main-color);">Edit Profile</a> to add your Personal Details & Social Links!</p>
+         {% endif %}
+      </div>
+   </div>
+</section>
+{% endblock %}
